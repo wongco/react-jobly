@@ -28,8 +28,9 @@ class JoblyApi {
     return apiResponse.company;
   }
 
-  static async getCompanies() {
-    let apiResponse = await this.request(`companies/`);
+  static async getCompanies(dataObj) {
+    // dataObj, single param search
+    let apiResponse = await this.request(`companies/`, dataObj);
     return apiResponse.companies;
   }
 
