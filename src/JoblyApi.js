@@ -1,5 +1,7 @@
+import axios from 'axios';
+
 class JoblyApi {
-  static async request(endpoint, params = {}, verb = 'get') {
+  static async request(endpoint, params = {}, verb = 'GET') {
     console.debug('API Call:', endpoint, params, verb);
 
     params._token = // for now, hardcode token for "testuser"
@@ -11,7 +13,7 @@ class JoblyApi {
       return (await axios({
         method: verb,
         url: `http://localhost:3001/${endpoint}`,
-        data: params
+        params
       })).data;
     } catch (err) {
       console.error('API Error:', err.response);
@@ -20,14 +22,54 @@ class JoblyApi {
     }
   }
 
-  static async getCompany(handle) {
-    let res = await this.request(`companies/${handle}`);
-    return res.company;
+  /** Company route ajax requests */
+  static async getCompany({ handle }) {
+    let apiResponse = await this.request(`companies/${handle}`);
+    return apiResponse.company;
   }
 
-  // get Specific Company (REST)
+  static async getCompanies() {
+    let apiResponse = await this.request(`companies/`);
+    return apiResponse.companies;
+  }
 
-  // get Job List (REST)
+  /** Job route ajax requests */
+  static async getJob({ id }) {
+    let apiResponse = await this.request(`jobs/${id}`);
+    return apiResponse.job;
+  }
 
-  // get Specific Job Detail (REST)
+  static async getJobs() {
+    let apiResponse = await this.request(`jobs/`);
+    return apiResponse.jobs;
+  }
+
+  /** Base route ajax requests */
+  static async loginUser(userDetails) {
+    // userDetails props: username, password
+    let apiResponse = await this.request(`/login`, userDetails, 'POST');
+    return apiResponse.jobs;
+  }
+
+  /** User route ajax requests */
+  static async createUser(userDetails) {
+    // userDetails props: username, password, firstname, lastname, email, photo_url Opt: isAdmin
+    let apiResponse = await this.request(`users/`, userDetails, 'POST');
+    return apiResponse.job;
+  }
+
+  static async getUser({ username }) {
+    let apiResponse = await this.request(`users/${username}`);
+    return apiResponse.jobs;
+  }
+
+  static async updateUser({ username, ...userDetails }) {
+    // userDetails: firstname, lastname, email, photo_url
+    let apiResponse = await this.request(
+      `users/${username}`,
+      userDetails,
+      'PATCH'
+    );
+    return apiResponse.jobs;
+  }
 }
