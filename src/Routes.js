@@ -4,8 +4,14 @@ import Navbar from './NavBar';
 import ResourceList from './ResourceList';
 import CompanyDetail from './CompanyDetail';
 import JoblyApi from './JoblyApi';
+import styled from 'styled-components';
 
 // import Company from './Company';
+
+const StyledRoutesContainer = styled.div`
+  background-color: #f8f9fa;
+  height: 100vh;
+`;
 
 class Routes extends Component {
   constructor(props) {
@@ -19,7 +25,7 @@ class Routes extends Component {
 
   render() {
     return (
-      <div>
+      <StyledRoutesContainer>
         <Navbar />
         <Switch>
           <Route exact path="/" render={() => <p>Homepage dawg!!!!</p>} />
@@ -64,7 +70,7 @@ class Routes extends Component {
             render={() => <p>Route Profieeeeeeeee</p>}
           />
         </Switch>
-      </div>
+      </StyledRoutesContainer>
     );
   }
 

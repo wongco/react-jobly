@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-//import './Navbar.css';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
@@ -53,10 +52,6 @@ const StyledLoginLink = styled(StyledNavLink)`
 `;
 
 class Navbar extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <StyledNav>
@@ -67,15 +62,12 @@ class Navbar extends Component {
           <StyledCompanyLink exact to="/companies">
             Companies
           </StyledCompanyLink>
-
           <StyledJobsLink exact to="/jobs">
             Jobs
           </StyledJobsLink>
-
           <StyledProfileLink exact to="/profile">
             Profile
           </StyledProfileLink>
-
           <StyledLoginLink exact to="/login">
             Login
           </StyledLoginLink>

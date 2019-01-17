@@ -6,46 +6,76 @@ const StyledCard = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 70vw;
-  background-color: peachpuff;
-  margin: 5px 10px;
+  height: 150px;
+  width: 100%;
+  background-color: white;
+  margin: 10px 0px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22), 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.5);
+  }
 `;
 
 const JobTextContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  outline: 1px black solid;
-  text-align: left;
-  padding: 0px 5px;
-  width: 80%;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  padding: 0px 30px;
+  width: 100%;
+  color: rgba(0, 0, 0, 0.75);
 `;
 
-// const JobLogo = styled.img`
-//   width: 80%;
-//   height: auto;
-//   margin: 10px 10px;
-// `;
+const StyledName = styled.p`
+  font-weight: bold;
+`;
+
+const StyledButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: auto;
+  min-width: 150px;
+  width: 150px;
+  padding: 20px;
+`;
+
+const StyledButton = styled.button`
+  font-size: 120%;
+  font-weight: bold;
+  border: none;
+  background-color: rgb(220, 53, 69);
+  color: white;
+  border-radius: 5px;
+  padding: 10px 15px;
+  transition: background-color 0.75s;
+
+  &:hover {
+    background-color: #4682b4;
+    cursor: pointer;
+  }
+`;
 
 class JobCard extends Component {
   // <JobCard key={Job.id} info={Job} />
-
   render() {
     const { id, title, salary, equity, company_handle } = this.props.info;
     return (
-      <Link to={`jobs/${id}`}>
-        <StyledCard>
+      <StyledCard>
+        <Link to={`jobs/${id}`}>
           <JobTextContainer>
-            <p>{title}</p>
-            <p>{salary}</p>
-            <p>{equity}</p>
-            <p>{company_handle}</p>
+            <StyledName>{title}</StyledName>
+            <p>Salary: {salary}</p>
+            {equity ? <p>Equity {equity}</p> : null}
+            <p>Company: {company_handle}</p>
           </JobTextContainer>
-          <div>
-            <button>Apply</button>
-          </div>
-        </StyledCard>
-      </Link>
+        </Link>
+        <StyledButtonContainer>
+          <StyledButton>APPLY</StyledButton>
+        </StyledButtonContainer>
+      </StyledCard>
     );
   }
 }

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-//import './SearchBar.css';
 import styled from 'styled-components';
 
 const StyledSearchBar = styled.div`
   margin-top: 50px;
-  width: 70vw;
+  width: 100%;
 `;
 
 const StyledForm = styled.form`
@@ -12,7 +11,6 @@ const StyledForm = styled.form`
   width: 100%;
   height: 45px;
   margin: 10px 0px;
-  /* justify-content: space-between; */
 `;
 
 const StyledInput = styled.input`

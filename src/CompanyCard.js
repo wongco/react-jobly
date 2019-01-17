@@ -8,19 +8,32 @@ const StyledCard = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 70vw;
-  background-color: peachpuff;
-  margin: 5px 10px;
+  width: 100%;
+  background-color: white;
+  margin: 10px 0px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22), 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.5);
+  }
 `;
 
 const CompanyTextContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  outline: 1px black solid;
+  justify-content: space-around;
   text-align: left;
-  padding: 0px 5px;
+  padding: 0px 20px;
   width: 100%;
+  color: rgba(0, 0, 0, 0.75);
+`;
+
+const CompanyName = styled.p`
+  font-weight: bold;
+`;
+
+const CompanyDesc = styled.p`
+  margin-bottom: 40px;
 `;
 
 const CompanyLogoContainer = styled.div`
@@ -46,8 +59,8 @@ class CompanyCard extends Component {
       <Link to={`companies/${handle}`}>
         <StyledCard>
           <CompanyTextContainer>
-            <p>{name}</p>
-            <p>{description}</p>
+            <CompanyName>{name}</CompanyName>
+            <CompanyDesc>{description}</CompanyDesc>
           </CompanyTextContainer>
           <CompanyLogoContainer>
             <CompanyLogo src={logo} alt="Company Logo" />

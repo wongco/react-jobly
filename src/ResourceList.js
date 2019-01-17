@@ -4,11 +4,15 @@ import JobCard from './JobCard';
 import SearchBar from './SearchBar';
 import styled from 'styled-components';
 
+const ResourceListContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+`;
+
 const SearchResultsContainer = styled.div`
   display: flex;
-  align-items: center;
   flex-direction: column;
-  /* background-color: olive; */
+  width: 65vw;
 `;
 
 class ResourceList extends Component {
@@ -52,10 +56,12 @@ class ResourceList extends Component {
 
   render() {
     return (
-      <SearchResultsContainer>
-        <SearchBar onSearch={this.searchResources} />
-        {this.renderResources()}
-      </SearchResultsContainer>
+      <ResourceListContainer>
+        <SearchResultsContainer>
+          <SearchBar onSearch={this.searchResources} />
+          {this.renderResources()}
+        </SearchResultsContainer>
+      </ResourceListContainer>
     );
   }
 }

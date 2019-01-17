@@ -40,8 +40,8 @@ class JoblyApi {
     return apiResponse.job;
   }
 
-  static async getJobs() {
-    let apiResponse = await JoblyApi.request(`jobs/`);
+  static async getJobs(dataObj = {}) {
+    let apiResponse = await JoblyApi.request(`jobs/`, dataObj);
     return apiResponse.jobs;
   }
 

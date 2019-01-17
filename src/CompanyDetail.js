@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-//import './CompanyDetail.css';
 import JoblyApi from './JoblyApi';
 import JobCard from './JobCard';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 
 class CompanyDetail extends Component {
   constructor(props) {
