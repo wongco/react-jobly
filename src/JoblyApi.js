@@ -2,11 +2,11 @@ import axios from 'axios';
 
 class JoblyApi {
   static async request(endpoint, params = {}, verb = 'GET') {
-    params._token = // for now, hardcode token for "testuser"
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6' +
-      'InRlc3R1c2VyIiwiaXNfYWRtaW4iOmZhbHNlLCJpYXQiOjE1NDE1N' +
-      'jQ2Nzl9.LYDHSkl81gEm7jfHv9wJhzD4ndpuBkSzBan8Nirb6UY';
-
+    // params._token = // for now, hardcode token for "testuser"
+    //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6' +
+    //   'InRlc3R1c2VyIiwiaXNfYWRtaW4iOmZhbHNlLCJpYXQiOjE1NDE1N' +
+    //   'jQ2Nzl9.LYDHSkl81gEm7jfHv9wJhzD4ndpuBkSzBan8Nirb6UY';
+    params._token = JSON.parse(localStorage.getItem('token'));
     console.debug('API Call:', endpoint, params, verb);
 
     try {
@@ -48,7 +48,7 @@ class JoblyApi {
   /** Base route ajax requests */
   static async loginUser(userDetails = {}) {
     // userDetails props: username, password
-    let apiResponse = await JoblyApi.request(`/login`, userDetails, 'POST');
+    let apiResponse = await JoblyApi.request(`login`, userDetails, 'POST');
     return apiResponse.jobs;
   }
 

@@ -3,6 +3,7 @@ import CompanyCard from './CompanyCard';
 import JobCard from './JobCard';
 import SearchBar from './SearchBar';
 import styled from 'styled-components';
+import JoblyApi from './JoblyApi';
 
 const ResourceListContainer = styled.div`
   display: flex;
@@ -25,21 +26,28 @@ class ResourceList extends Component {
   }
 
   async componentDidMount() {
-    const allResources = await this.props.apiGetResource();
-    this.setState({ resources: allResources });
+    const { resourceType } = this.props;
+    const allResources = await JoblyApi.request(`${resourceType}/`);
+    this.setState({ resources: allResources[resourceType] });
   }
 
-  // async componentDidUpdate() {
-  //   const allResources = await this.props.apiGetResource();
-  //   this.setState({ resources: allResources });
-  // }
+  // This logic is needed when changing context _e.g._ from job to company
+  async componentDidUpdate(prevProps) {
+    const prevType = prevProps.resourceType;
+    const { resourceType } = this.props;
+    if (resourceType !== prevType) {
+      const allResources = await JoblyApi.request(`${resourceType}/`);
+      this.setState({ resources: allResources[resourceType] });
+    }
+  }
 
   // Handles AJAX get to the API based off of search parameters
   async searchResources(queryString) {
-    const resources = await this.props.apiGetResource({
+    const { resourceType } = this.props;
+    const apiResponse = await JoblyApi.request(`${resourceType}/`, {
       search: queryString
     });
-    this.setState({ resources });
+    this.setState({ resources: apiResponse[resourceType] });
   }
 
   // Renders the appropriate resource card based off of the resourceType prop

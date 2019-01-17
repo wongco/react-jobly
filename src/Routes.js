@@ -3,7 +3,8 @@ import { Switch, Route } from 'react-router-dom';
 import Navbar from './NavBar';
 import ResourceList from './ResourceList';
 import CompanyDetail from './CompanyDetail';
-import JoblyApi from './JoblyApi';
+import AuthForm from './AuthForm';
+// import JoblyApi from './JoblyApi';
 // import styled from 'styled-components';
 
 // import Company from './Company';
@@ -11,7 +12,23 @@ import JoblyApi from './JoblyApi';
 class Routes extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      username: '',
+      token: ''
+    };
     this.getCompanyHandle = this.getCompanyHandle.bind(this);
+    this.authFormSubmit = this.authFormSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    const token = JSON.parse(localStorage.getItem('token'));
+    const username = JSON.parse(localStorage.getItem('username'));
+
+    this.setState({ username, token });
+  }
+
+  authFormSubmit(authDetails) {
+    this.setState(authDetails);
   }
 
   getCompanyHandle({ match }) {
@@ -26,14 +43,18 @@ class Routes extends Component {
           <Route exact path="/" render={() => <p>Homepage dawg!!!!</p>} />
           <Route
             exact
+            path="/login"
+            render={() => <AuthForm submit={this.authFormSubmit} />}
+          />
+          <Route
+            exact
+            path="/profile"
+            render={() => <p>Route Profieeeeeeeee</p>}
+          />
+          <Route
+            exact
             path="/companies"
-            render={props => (
-              <ResourceList
-                key={props.location.pathname}
-                resourceType="companies"
-                apiGetResource={JoblyApi.getCompanies}
-              />
-            )}
+            render={props => <ResourceList resourceType="companies" />}
           />
           <Route
             exact
@@ -46,23 +67,7 @@ class Routes extends Component {
             exact
             id="jobs"
             path="/jobs"
-            render={props => (
-              <ResourceList
-                key={props.location.pathname}
-                resourceType="jobs"
-                apiGetResource={JoblyApi.getJobs}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/login"
-            render={() => <p>Route Logggggggggin</p>}
-          />
-          <Route
-            exact
-            path="/profile"
-            render={() => <p>Route Profieeeeeeeee</p>}
+            render={props => <ResourceList resourceType="jobs" />}
           />
         </Switch>
       </div>
