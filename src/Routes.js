@@ -1,21 +1,55 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Navbar from './NavBar';
+import ResourceList from './ResourceList';
+import CompanyDetail from './CompanyDetail';
+import JoblyApi from './JoblyApi';
+
+// import Company from './Company';
 
 class Routes extends Component {
+  constructor(props) {
+    super(props);
+    this.getCompanyHandle = this.getCompanyHandle.bind(this);
+  }
+
+  getCompanyHandle({ match }) {
+    return match.params.handle;
+  }
+
   render() {
     return (
       <div>
         <Navbar />
         <Switch>
-          <Route exact path="/" render={() => <p>Route Homey</p>} />
-          <Route exact path="/companies" render={() => <p>Route Comp</p>} />
+          <Route exact path="/" render={() => <p>Homepage dawg!!!!</p>} />
+          <Route
+            exact
+            path="/companies"
+            component={() => (
+              <ResourceList
+                resourceType="companies"
+                apiGetResource={JoblyApi.getCompanies}
+              />
+            )}
+          />
           <Route
             exact
             path="/companies/:handle"
-            render={() => <p>Route Handdddddddle Comp</p>}
+            render={props => (
+              <CompanyDetail handle={this.getCompanyHandle(props)} />
+            )}
           />
-          <Route exact path="/jobs" render={() => <p>Route Jobbbbbss</p>} />
+          <Route
+            exact
+            path="/jobs"
+            component={() => (
+              <ResourceList
+                resourceType="jobs"
+                apiGetResource={JoblyApi.getJobs}
+              />
+            )}
+          />
           <Route
             exact
             path="/login"
@@ -39,7 +73,7 @@ class Routes extends Component {
 // /companies
 // List all companies
 // /companies/apple
-// View details of this company
+// View details of this ResourceList
 // /jobs
 // List all jobs
 // /login
