@@ -1,7 +1,38 @@
 import React, { Component } from 'react';
 import JoblyApi from './JoblyApi';
 import JobCard from './JobCard';
-// import styled from 'styled-components';
+import styled from 'styled-components';
+
+const CompanyContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+`;
+
+const CompanyInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 65vw;
+`;
+
+const CompanyName = styled.p`
+  display: flex;
+  font-size: 120%;
+  font-weight: 600;
+  padding: 0;
+  margin: 10px 0;
+`;
+
+const CompanyDesc = styled.p`
+  display: flex;
+  margin: 10px 0;
+`;
+
+const JobsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
 
 class CompanyDetail extends Component {
   constructor(props) {
@@ -13,7 +44,6 @@ class CompanyDetail extends Component {
   }
 
   async componentDidMount() {
-    console.log('Detail mounted', this.props.handle);
     const { jobs, ...company } = await JoblyApi.getCompany({
       handle: this.props.handle
     });
@@ -27,11 +57,13 @@ class CompanyDetail extends Component {
     ));
     const { name, description } = this.state.company;
     return (
-      <div>
-        <p>{name}</p>
-        <p>{description}</p>
-        <div>{jobs}</div>
-      </div>
+      <CompanyContainer>
+        <CompanyInfoContainer>
+          <CompanyName>{name}</CompanyName>
+          <CompanyDesc>{description}</CompanyDesc>
+          <JobsContainer>{jobs}</JobsContainer>
+        </CompanyInfoContainer>
+      </CompanyContainer>
     );
   }
 }

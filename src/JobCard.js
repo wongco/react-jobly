@@ -20,15 +20,22 @@ const StyledCard = styled.div`
 const JobTextContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-items: flex-start;
-  padding: 0px 30px;
+  padding: 0px 20px;
   width: 100%;
   color: rgba(0, 0, 0, 0.75);
 `;
 
 const StyledName = styled.p`
-  font-weight: bold;
+  font-weight: 600;
+  padding: 0;
+  margin-top: 20px;
+`;
+
+const StyledJobDetails = styled.p`
+  margin: 2px 0;
+  padding: 0;
 `;
 
 const StyledButtonContainer = styled.div`
@@ -67,9 +74,11 @@ class JobCard extends Component {
         <Link to={`jobs/${id}`}>
           <JobTextContainer>
             <StyledName>{title}</StyledName>
-            <p>Salary: {salary}</p>
-            {equity ? <p>Equity {equity}</p> : null}
-            <p>Company: {company_handle}</p>
+            <StyledJobDetails>Salary: {salary}</StyledJobDetails>
+            {equity ? (
+              <StyledJobDetails>Equity {equity}</StyledJobDetails>
+            ) : null}
+            <StyledJobDetails>Company: {company_handle}</StyledJobDetails>
           </JobTextContainer>
         </Link>
         <StyledButtonContainer>

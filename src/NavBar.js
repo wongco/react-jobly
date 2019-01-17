@@ -9,6 +9,7 @@ const StyledNav = styled.nav`
   flex-direction: row;
   justify-content: space-between;
   background-color: #4682B4;
+  font-size: 105%;
   box-shadow 1px 1px 18px #4683b451;
 `;
 
