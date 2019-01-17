@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 
 const StyledNav = styled.nav`
   height: 50px;
@@ -39,6 +39,27 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
+const StyledLogoutButton = styled.button`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0px 15px;
+  margin: 0px 1px;
+  color: white;
+  font-weight: 400;
+  height: 100%;
+  width: 60px;
+
+  &:hover {
+    background-color: gray;
+  }
+
+  &.active {
+    font-weight: 800;
+  }
+`;
+
 const StyledCompanyLink = styled(StyledNavLink)`
   width: 120px;
 `;
@@ -53,26 +74,47 @@ const StyledLoginLink = styled(StyledNavLink)`
 `;
 
 class Navbar extends Component {
+  constructor(props) {
+    super(props);
+    this.handleLogout = this.handleLogout.bind(this);
+  }
+
+  handleLogout() {
+    this.props.logout();
+    // Access to history is granted by the withRouter export
+    this.props.history.push('/');
+  }
+
   render() {
+    const display = this.props.token ? (
+      <StyledRouteLinkContainer>
+        <StyledCompanyLink exact to="/companies">
+          Companies
+        </StyledCompanyLink>
+        <StyledJobsLink exact to="/jobs">
+          Jobs
+        </StyledJobsLink>
+        <StyledProfileLink exact to="/profile">
+          Profile
+        </StyledProfileLink>
+        <StyledLogoutButton onClick={this.handleLogout}>
+          Logout
+        </StyledLogoutButton>
+      </StyledRouteLinkContainer>
+    ) : (
+      <StyledRouteLinkContainer>
+        <StyledLoginLink exact to="/login">
+          Login
+        </StyledLoginLink>
+      </StyledRouteLinkContainer>
+    );
+
     return (
       <StyledNav>
         <StyledNavLink exact to="/">
           Jobly
         </StyledNavLink>
-        <StyledRouteLinkContainer>
-          <StyledCompanyLink exact to="/companies">
-            Companies
-          </StyledCompanyLink>
-          <StyledJobsLink exact to="/jobs">
-            Jobs
-          </StyledJobsLink>
-          <StyledProfileLink exact to="/profile">
-            Profile
-          </StyledProfileLink>
-          <StyledLoginLink exact to="/login">
-            Login
-          </StyledLoginLink>
-        </StyledRouteLinkContainer>
+        {display}
       </StyledNav>
     );
   }
@@ -82,6 +124,8 @@ class Navbar extends Component {
 
 Navbar.propTypes = {};
 
-Navbar.defaultProps = {};
+Navbar.defaultProps = {
+  token: ''
+};
 
-export default Navbar;
+export default withRouter(Navbar);

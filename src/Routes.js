@@ -1,30 +1,51 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import Navbar from './NavBar';
 import ResourceList from './ResourceList';
 import CompanyDetail from './CompanyDetail';
 import AuthForm from './AuthForm';
+import HomePage from './HomePage';
 // import JoblyApi from './JoblyApi';
 // import styled from 'styled-components';
 
 // import Company from './Company';
 
+// JSX including ProtectedRoute must be given spread props
+class ProtectedRoute extends Component {
+  render() {
+    if (this.props.token) {
+      return <Route {...this.props} />;
+    }
+    return <Redirect to="/" />;
+  }
+}
+
 class Routes extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
       token: ''
     };
     this.getCompanyHandle = this.getCompanyHandle.bind(this);
     this.authFormSubmit = this.authFormSubmit.bind(this);
+    this.logout = this.logout.bind(this);
+    this.renderHomePage = this.renderHomePage.bind(this);
+    this.renderLoginPage = this.renderLoginPage.bind(this);
+    this.renderProfilePage = this.renderProfilePage.bind(this);
+    this.renderCompaniesPage = this.renderCompaniesPage.bind(this);
+    this.rendCompDetail = this.rendCompDetail.bind(this);
+    this.renderJobDetail = this.renderJobDetail.bind(this);
   }
 
   componentDidMount() {
     const token = JSON.parse(localStorage.getItem('token'));
-    const username = JSON.parse(localStorage.getItem('username'));
 
-    this.setState({ username, token });
+    this.setState({ token });
+  }
+
+  logout() {
+    localStorage.clear();
+    this.setState({ token: '' });
   }
 
   authFormSubmit(authDetails) {
@@ -35,39 +56,71 @@ class Routes extends Component {
     return match.params.handle;
   }
 
+  renderHomePage() {
+    return <HomePage token={this.state.token} />;
+  }
+
+  renderLoginPage() {
+    return <AuthForm submit={this.authFormSubmit} />;
+  }
+
+  renderProfilePage() {
+    return <p>Route Profieeeeeeeee</p>;
+  }
+
+  renderCompaniesPage(props) {
+    return <ResourceList resourceType="companies" />;
+  }
+
+  rendCompDetail(props) {
+    return <CompanyDetail handle={this.getCompanyHandle(props)} />;
+  }
+
+  renderJobDetail(props) {
+    return <ResourceList resourceType="jobs" />;
+  }
+
   render() {
+    const { token } = this.state;
     return (
       <div>
-        <Navbar />
+        <Navbar logout={this.logout} token={token} />
         <Switch>
-          <Route exact path="/" render={() => <p>Homepage dawg!!!!</p>} />
-          <Route
+          <ProtectedRoute
+            token={token}
+            exact
+            path="/"
+            render={this.renderHomePage}
+          />
+          <ProtectedRoute
+            token={token}
             exact
             path="/login"
-            render={() => <AuthForm submit={this.authFormSubmit} />}
+            render={this.renderLoginPage}
           />
-          <Route
+          <ProtectedRoute
+            token={token}
             exact
             path="/profile"
-            render={() => <p>Route Profieeeeeeeee</p>}
+            render={this.renderProfilePage}
           />
-          <Route
+          <ProtectedRoute
+            token={token}
             exact
             path="/companies"
-            render={props => <ResourceList resourceType="companies" />}
+            render={this.renderCompaniesPage}
           />
-          <Route
+          <ProtectedRoute
+            token={token}
             exact
             path="/companies/:handle"
-            render={props => (
-              <CompanyDetail handle={this.getCompanyHandle(props)} />
-            )}
+            render={this.rendCompDetail}
           />
-          <Route
+          <ProtectedRoute
+            token={token}
             exact
-            id="jobs"
             path="/jobs"
-            render={props => <ResourceList resourceType="jobs" />}
+            render={this.renderJobDetail}
           />
         </Switch>
       </div>

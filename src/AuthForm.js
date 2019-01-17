@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import JoblyApi from './JoblyApi';
 
 class AuthForm extends Component {
@@ -32,6 +32,7 @@ class AuthForm extends Component {
   async handleSubmit(evt) {
     evt.preventDefault();
     const { fields, signup } = this.state;
+    // Extracting userDetails from the state fields array into an API-ready object
     const userDetails = fields.reduce((last, curr) => {
       last[curr.name] = curr.value;
       return last;
@@ -51,25 +52,24 @@ class AuthForm extends Component {
         );
       }
 
-      if (apiResponse.token) {
-        localStorage.setItem('token', JSON.stringify(apiResponse.token));
-        localStorage.setItem('username', JSON.stringify(username));
-        this.setState({ success: true });
-        // May need to move this.props.submit to componentWillUnmount
-        this.props.submit({ username, token: apiResponse.token });
-      }
+      //   Store token. Otherwise the error will be caught
+      localStorage.setItem('token', JSON.stringify(apiResponse.token));
+      this.props.submit({ username, token: apiResponse.token });
+      this.props.history.replace('/jobs');
     } catch (err) {
       this.setState({ error: err });
     }
   }
 
+  //   Toggles whether to display signup or login forms
   toggleMode() {
     this.setState(currState => ({ signup: !currState.signup }));
   }
 
   renderFields() {
     const { fields, signup } = this.state;
-    const length = signup ? Infinity : 2;
+    const length = signup ? fields.length : 2;
+    // Decide between rendering just username/password and everything else
     return fields.slice(0, length).map(obj => {
       const { name, value, type } = obj;
       return (
@@ -88,9 +88,7 @@ class AuthForm extends Component {
   }
 
   render() {
-    const display = this.state.success ? (
-      <Redirect to="/" />
-    ) : (
+    return (
       <div>
         <div>
           <button disabled={!this.state.signup} onClick={this.toggleMode}>
@@ -104,10 +102,9 @@ class AuthForm extends Component {
           {this.renderFields()}
           <button>Submit</button>
         </form>
-        {this.state.error.length ? <div>{this.state.error}</div> : null}
+        {this.state.error.length && <div>{this.state.error}</div>}
       </div>
     );
-    return <div>{display}</div>;
   }
 }
 
