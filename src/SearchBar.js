@@ -3,25 +3,39 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 const StyledSearchBar = styled.div`
-  width: 80vw;
+  margin-top: 50px;
+  width: 70vw;
 `;
 
 const StyledForm = styled.form`
   display: flex;
-  justify-content: space-between;
   width: 100%;
-  height: 20px;
+  height: 45px;
   margin: 10px 0px;
+  /* justify-content: space-between; */
 `;
 
 const StyledInput = styled.input`
-  width: 83%;
-  height: 100%;
+  font-size: 125%;
+  padding-left: 15px;
+  width: 100%;
+  border: 1px solid gray;
+  border-radius: 5px 0px 0px 5px;
+  outline: none;
 `;
 
 const StyledButton = styled.button`
-  width: 13%;
-  /* Futz with the button height later */
+  font-size: 125%
+  width: 100px;
+  background-color: #20B2AA;
+  border-radius: 0px 5px 5px 0;
+  border: 1px solid gray;
+  color: white;
+
+  &:hover {
+    background-color: #008080;
+    cursor: pointer;
+  }
 `;
 
 class SearchBar extends Component {
@@ -53,7 +67,7 @@ class SearchBar extends Component {
           <StyledInput
             type="text"
             name="search"
-            placeholder="Enter search term"
+            placeholder="Enter search term..."
             value={this.state.search}
             onChange={this.handleChange}
           />

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-//import './JobCard.css';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -7,7 +6,7 @@ const StyledCard = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 80vw;
+  width: 70vw;
   background-color: peachpuff;
   margin: 5px 10px;
 `;

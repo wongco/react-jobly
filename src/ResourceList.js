@@ -8,7 +8,7 @@ const SearchResultsContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: olive;
+  /* background-color: olive; */
 `;
 
 class ResourceList extends Component {

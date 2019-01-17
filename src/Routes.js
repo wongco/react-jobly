@@ -26,8 +26,9 @@ class Routes extends Component {
           <Route
             exact
             path="/companies"
-            component={() => (
+            render={props => (
               <ResourceList
+                key={props.location.pathname}
                 resourceType="companies"
                 apiGetResource={JoblyApi.getCompanies}
               />
@@ -42,9 +43,11 @@ class Routes extends Component {
           />
           <Route
             exact
+            id="jobs"
             path="/jobs"
-            component={() => (
+            render={props => (
               <ResourceList
+                key={props.location.pathname}
                 resourceType="jobs"
                 apiGetResource={JoblyApi.getJobs}
               />

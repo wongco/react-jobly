@@ -4,10 +4,11 @@ import styled from 'styled-components';
 import defaultCompanyLogo from './defaultCompanyLogo.png';
 
 const StyledCard = styled.div`
+  height: 150px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 80vw;
+  width: 70vw;
   background-color: peachpuff;
   margin: 5px 10px;
 `;
@@ -19,18 +20,27 @@ const CompanyTextContainer = styled.div`
   outline: 1px black solid;
   text-align: left;
   padding: 0px 5px;
-  width: 80%;
+  width: 100%;
+`;
+
+const CompanyLogoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: auto;
+  min-width: 150px;
+  width: 150px;
 `;
 
 const CompanyLogo = styled.img`
-  width: 80%;
   height: auto;
+  width: 40%;
 `;
 
 class CompanyCard extends Component {
   render() {
     const logo = this.props.info.logo_url || defaultCompanyLogo;
-    console.log('Logo!', logo);
     const { handle, name, description } = this.props.info;
     return (
       <Link to={`companies/${handle}`}>
@@ -39,9 +49,9 @@ class CompanyCard extends Component {
             <p>{name}</p>
             <p>{description}</p>
           </CompanyTextContainer>
-          <div>
+          <CompanyLogoContainer>
             <CompanyLogo src={logo} alt="Company Logo" />
-          </div>
+          </CompanyLogoContainer>
         </StyledCard>
       </Link>
     );

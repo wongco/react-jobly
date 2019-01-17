@@ -4,19 +4,31 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
 const StyledNav = styled.nav`
+  height: 50px;
   width: 100vw;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background-color: skyblue;
-  padding: 10px 0px;
+  background-color: #4682B4;
+  box-shadow 1px 1px 18px #4683b451;
+`;
+
+const StyledRouteLinkContainer = styled.div`
+  display: flex;
+  padding-right: 30px;
+  height: 100%;
 `;
 
 const StyledNavLink = styled(NavLink)`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0px 15px;
+  margin: 0px 1px;
   color: white;
-  background-color: skyblue;
-  margin: 5px 10px;
-  text-decoration: none;
+  font-weight: 400;
+  height: 100%;
 
   &:hover {
     background-color: gray;
@@ -27,6 +39,19 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
+const StyledCompanyLink = styled(StyledNavLink)`
+  width: 120px;
+`;
+const StyledJobsLink = styled(StyledNavLink)`
+  width: 60px;
+`;
+const StyledProfileLink = styled(StyledNavLink)`
+  width: 70px;
+`;
+const StyledLoginLink = styled(StyledNavLink)`
+  width: 60px;
+`;
+
 class Navbar extends Component {
   constructor(props) {
     super(props);
@@ -35,25 +60,26 @@ class Navbar extends Component {
   render() {
     return (
       <StyledNav>
-        <div>
-          <StyledNavLink exact to="/">
-            Home
-          </StyledNavLink>
-        </div>
-        <div>
-          <StyledNavLink exact to="/companies">
+        <StyledNavLink exact to="/">
+          Jobly
+        </StyledNavLink>
+        <StyledRouteLinkContainer>
+          <StyledCompanyLink exact to="/companies">
             Companies
-          </StyledNavLink>
-          <StyledNavLink exact to="/jobs">
+          </StyledCompanyLink>
+
+          <StyledJobsLink exact to="/jobs">
             Jobs
-          </StyledNavLink>
-          <StyledNavLink exact to="/profile">
+          </StyledJobsLink>
+
+          <StyledProfileLink exact to="/profile">
             Profile
-          </StyledNavLink>
-          <StyledNavLink exact to="/login">
+          </StyledProfileLink>
+
+          <StyledLoginLink exact to="/login">
             Login
-          </StyledNavLink>
-        </div>
+          </StyledLoginLink>
+        </StyledRouteLinkContainer>
       </StyledNav>
     );
   }
