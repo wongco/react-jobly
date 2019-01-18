@@ -36,18 +36,39 @@ const StyledButton = styled.button`
   }
 `;
 
+// Custom debouncer. Used to optimize real-time search
+function debouncer(func, wait) {
+  let timeOut;
+  function debounced(...args) {
+    clearTimeout(timeOut);
+    timeOut = setTimeout(() => func(...args), wait);
+  }
+  function timeClear() {
+    clearTimeout(timeOut);
+  }
+  return [debounced, timeClear];
+}
+
 class SearchBar extends Component {
   constructor(props) {
     super(props);
+    const [search, timeClear] = debouncer(this.props.onSearch, 500);
     this.state = {
       search: ''
     };
+    this.bouncedSearch = search;
+    this.timeClear = timeClear;
     this.handleChange = this.handleChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
   }
 
+  componentWillUnmount() {
+    this.timeClear();
+  }
+
   handleSearch(event) {
     event.preventDefault();
+    this.timeClear();
     this.props.onSearch(this.state.search);
   }
 
@@ -56,6 +77,7 @@ class SearchBar extends Component {
     this.setState({
       [evt.target.name]: evt.target.value
     });
+    this.bouncedSearch(evt.target.value);
   }
 
   render() {
