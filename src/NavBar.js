@@ -15,6 +15,7 @@ const StyledNav = styled.nav`
 
 const StyledRouteLinkContainer = styled.div`
   display: flex;
+  flex-direction: row;
   padding-right: 30px;
   height: 100%;
 `;
@@ -39,7 +40,7 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
-const StyledLogoutButton = styled.button`
+const StyledLogoutButton = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -49,10 +50,12 @@ const StyledLogoutButton = styled.button`
   color: white;
   font-weight: 400;
   height: 100%;
-  width: 60px;
+  width: 80px;
+  border: none;
 
   &:hover {
     background-color: gray;
+    cursor: pointer;
   }
 
   &.active {

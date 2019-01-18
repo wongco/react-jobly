@@ -15,8 +15,6 @@ import JoblyApi from './JoblyApi';
 class ProtectedRoute extends Component {
   render() {
     if (this.props.token) {
-      // console.log(`passing: stuff to the Route`);
-      // console.log(this.props.render);
       return <Route {...this.props} />;
     }
     return <Redirect to="/" />;
@@ -31,7 +29,6 @@ class Routes extends Component {
       currentUser: {}
     };
     this.getCompanyHandle = this.getCompanyHandle.bind(this);
-    this.authFormSubmit = this.authFormSubmit.bind(this);
     this.logout = this.logout.bind(this);
     this.getUserDetails = this.getUserDetails.bind(this);
     this.redirectJobsAfter = this.redirectJobsAfter.bind(this);
@@ -39,7 +36,9 @@ class Routes extends Component {
   }
 
   async componentDidMount() {
-    const token = JSON.parse(localStorage.getItem('token'));
+    /** extract data and place user data into State */
+    // const token = JSON.parse(localStorage.getItem('token'));
+    const { token } = this.state;
     if (token) {
       const userDetails = await this.getUserDetails(this.state.token);
       this.setState({ token, ...userDetails });
@@ -56,11 +55,12 @@ class Routes extends Component {
     this.setState({ token, ...userDetails });
   }
 
-  async authFormSubmit(token) {
-    const userDetails = await this.getUserDetails(token);
-    this.setState({ token, ...userDetails });
-    this.props.history.replace('/jobs');
-  }
+  // depreciate - do to wrapper + editProfileSubmit
+  // async authFormSubmit(token) {
+  //   const userDetails = await this.getUserDetails(token);
+  //   this.setState({ token, ...userDetails });
+  //   this.props.history.replace('/jobs');
+  // }
 
   /** Composition helper that sends user to '/jobs' after running async callback function */
   redirectJobsAfter(func) {
@@ -76,6 +76,7 @@ class Routes extends Component {
     return match.params.handle;
   }
 
+  /** helper function to get Uer Data from AJAX call */
   async getUserDetails(token) {
     const tokenParts = token.split('.');
     const { username } = JSON.parse(atob(tokenParts[1]));
@@ -112,7 +113,6 @@ class Routes extends Component {
               <Profile
                 token={token}
                 getUserDetails={this.getUserDetails}
-                // currentUser={details}
                 submit={this.editProfileSubmit}
               />
             )}

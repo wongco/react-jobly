@@ -21,12 +21,11 @@ class Profile extends Component {
   }
 
   async componentDidMount() {
+    // assumes token is good due to being protected route
     const { token } = this.props;
     const currentUserDetails = await this.props.getUserDetails(token);
     const { jobs, photo_url, ...userDetails } = currentUserDetails.currentUser;
-    if (photo_url === null) {
-      userDetails.photo_url = '';
-    }
+    userDetails.photo_url = photo_url || '';
     this.setState({ ...userDetails });
   }
 
@@ -65,11 +64,11 @@ class Profile extends Component {
       await JoblyApi.request(`users/${username}`, userDetails, 'PATCH');
       this.props.submit(loginResponse.token);
 
-      // setState to success, clear password field, render success message, remove after 5 seconds
+      // setState to success, clear password field, render success message, remove after 3 seconds
       this.setState({ success: true, password: '' }, () => {
         setTimeout(() => {
           this.setState({ success: false });
-        }, 5000);
+        }, 3000);
       });
     } catch (err) {
       this.setState({ error: err });
