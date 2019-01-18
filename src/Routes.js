@@ -49,18 +49,20 @@ class Routes extends Component {
     super(props);
     this.state = {
       token: JSON.parse(localStorage.getItem('token')),
-      currentUser: {}
+      currentUser: {
+        jobs: new Set()
+      }
     };
     this.getCompanyHandle = this.getCompanyHandle.bind(this);
     this.logout = this.logout.bind(this);
     this.getUserDetails = this.getUserDetails.bind(this);
     this.redirectJobsAfter = this.redirectJobsAfter.bind(this);
     this.editProfileSubmit = this.editProfileSubmit.bind(this);
+    this.applyToJob = this.applyToJob.bind(this);
   }
 
   async componentDidMount() {
     /** extract data and place user data into State */
-    // const token = JSON.parse(localStorage.getItem('token'));
     const { token } = this.state;
     if (token) {
       const userDetails = await this.getUserDetails(this.state.token);
@@ -78,13 +80,6 @@ class Routes extends Component {
     this.setState({ token, ...userDetails });
   }
 
-  // deprecate - due to wrapper + editProfileSubmit
-  // async authFormSubmit(token) {
-  //   const userDetails = await this.getUserDetails(token);
-  //   this.setState({ token, ...userDetails });
-  //   this.props.history.replace('/jobs');
-  // }
-
   /** Composition helper that sends user to '/jobs' after running async callback function */
   redirectJobsAfter(func) {
     async function wrapper(...args) {
@@ -99,11 +94,32 @@ class Routes extends Component {
     return match.params.handle;
   }
 
+  // make API call to add job to applied list, update state locally
+  async applyToJob(id) {
+    try {
+      await JoblyApi.request(`jobs/${id}/apply`, {}, 'POST');
+      this.setState(state => {
+        const newCurrentUser = { ...state.currentUser };
+        newCurrentUser.jobs = new Set(newCurrentUser.jobs);
+        newCurrentUser.jobs.add(id);
+        return {
+          currentUser: newCurrentUser
+        };
+      });
+    } catch (error) {
+      console.log('Caught error while applying to Job', error.message);
+    }
+  }
+
   /** helper function to get Uer Data from AJAX call */
   async getUserDetails(token) {
     const tokenParts = token.split('.');
     const { username } = JSON.parse(atob(tokenParts[1]));
     const { user } = await JoblyApi.request(`users/${username}`);
+    user.jobs = user.jobs.reduce((jobIdSet, jobObj) => {
+      jobIdSet.add(jobObj.id);
+      return jobIdSet;
+    }, new Set());
     return { currentUser: user };
   }
 
@@ -151,14 +167,24 @@ class Routes extends Component {
             exact
             path="/companies/:handle"
             render={props => (
-              <CompanyDetail handle={this.getCompanyHandle(props)} />
+              <CompanyDetail
+                applyToJob={this.applyToJob}
+                appliedSet={this.state.currentUser.jobs}
+                handle={this.getCompanyHandle(props)}
+              />
             )}
           />
           <ProtectedRoute
             token={token}
             exact
             path="/jobs"
-            render={() => <ResourceList resourceType="jobs" />}
+            render={() => (
+              <ResourceList
+                applyToJob={this.applyToJob}
+                appliedSet={this.state.currentUser.jobs}
+                resourceType="jobs"
+              />
+            )}
           />
         </Switch>
       </StyledContainer>

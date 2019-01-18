@@ -63,12 +63,30 @@ const StyledButton = styled.button`
     background-color: #4682b4;
     cursor: pointer;
   }
+
+  &:disabled {
+    background-color: gray;
+  }
 `;
 
 class JobCard extends Component {
-  // <JobCard key={Job.id} info={Job} />
+  handleClick = () => this.props.applyToJob(this.props.id);
+
   render() {
     const { id, title, salary, equity, company_handle } = this.props.info;
+
+    let buttonElement;
+    if (this.props.isApplied) {
+      buttonElement = (
+        <StyledButton onClick={() => console.log('unapply')} disabled>
+          APPLIED
+        </StyledButton>
+      );
+    } else {
+      buttonElement = (
+        <StyledButton onClick={this.handleClick}>APPLY</StyledButton>
+      );
+    }
     return (
       <StyledCard>
         <Link to={`jobs/${id}`}>
@@ -81,9 +99,7 @@ class JobCard extends Component {
             <StyledJobDetails>Company: {company_handle}</StyledJobDetails>
           </JobTextContainer>
         </Link>
-        <StyledButtonContainer>
-          <StyledButton>APPLY</StyledButton>
-        </StyledButtonContainer>
+        <StyledButtonContainer>{buttonElement}</StyledButtonContainer>
       </StyledCard>
     );
   }
@@ -91,6 +107,11 @@ class JobCard extends Component {
 
 JobCard.propTypes = {};
 
-JobCard.defaultProps = {};
+JobCard.defaultProps = {
+  // isApplied={this.props.appliedSet.has(job.id)}
+  // applyToJob={this.props.applyToJob}
+  // key={job.id}
+  // info={job}
+};
 
 export default JobCard;

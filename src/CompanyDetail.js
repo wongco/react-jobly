@@ -53,7 +53,13 @@ class CompanyDetail extends Component {
 
   render() {
     const jobs = this.state.jobs.map(job => (
-      <JobCard key={job.id} info={job} />
+      <JobCard
+        isApplied={this.props.appliedSet.has(job.id)}
+        applyToJob={this.props.applyToJob}
+        key={job.id}
+        id={job.id}
+        info={job}
+      />
     ));
     const { name, description } = this.state.company;
     return (
@@ -70,6 +76,9 @@ class CompanyDetail extends Component {
 
 CompanyDetail.propTypes = {};
 
-CompanyDetail.defaultProps = {};
+CompanyDetail.defaultProps = {
+  // applyToJob={this.applyToJob}
+  // appliedSet={this.state.currentUser.jobs}
+};
 
 export default CompanyDetail;

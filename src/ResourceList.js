@@ -57,7 +57,15 @@ class ResourceList extends Component {
       if (resourceType === 'companies') {
         return <CompanyCard key={resource.handle} info={resource} />;
       } else if (resourceType === 'jobs') {
-        return <JobCard key={resource.id} info={resource} />;
+        return (
+          <JobCard
+            key={resource.id}
+            info={resource}
+            id={resource.id}
+            isApplied={this.props.appliedSet.has(resource.id)}
+            applyToJob={this.props.applyToJob}
+          />
+        );
       } else return <p>Unhandled Resource</p>;
     });
   }

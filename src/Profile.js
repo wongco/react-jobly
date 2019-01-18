@@ -140,7 +140,6 @@ class Profile extends Component {
   }
 
   async handleSubmit(evt) {
-    console.log('hi');
     evt.preventDefault();
     let {
       username,
