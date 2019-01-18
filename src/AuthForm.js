@@ -60,6 +60,7 @@ const StyledForm = styled.form`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   width: 100%;
   border: 1px solid lightgray;
   background-color: white;
@@ -115,6 +116,16 @@ const StyledButton = styled.button`
   &:disabled {
   background: lightgray;
 }
+`;
+
+const StyledAert = styled.div`
+  width: 100%;
+  font-size: 120%;
+  margin: 10px 0;
+  color: white;
+  background-color: skyblue;
+  border-radius: 5px;
+  padding: 10px 0;
 `;
 
 class AuthForm extends Component {
@@ -200,6 +211,18 @@ class AuthForm extends Component {
   }
 
   render() {
+    // alert logic for errors and success message
+    let alertStyle = {
+      display: 'none'
+    };
+    let alertMessage = null;
+    if (this.state.success) {
+      alertMessage = 'User updated successfully.';
+      alertStyle.display = 'block';
+    } else if (this.state.error.length > 0) {
+      alertMessage = this.state.error;
+      alertStyle.display = 'block';
+    }
     // checks if fields are ready for form submit based on password
     const isFieldReady = this.state.fields[1].value.length > 0;
     return (
@@ -222,9 +245,10 @@ class AuthForm extends Component {
             </AuthButtonContainer>
             <StyledForm onSubmit={this.handleSubmit} className="AuthForm">
               {this.renderFields()}
+              <StyledAert style={alertStyle}>{alertMessage}</StyledAert>
               <StyledButton disabled={!isFieldReady}>Submit</StyledButton>
             </StyledForm>
-            {!!this.state.error.length && <div>{this.state.error}</div>}
+            {/* {!!this.state.error.length && <div>{this.state.error}</div>} */}
           </StyledCard>
         </ProfileContainer>
       </FlexContainer>
