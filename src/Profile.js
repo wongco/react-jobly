@@ -6,9 +6,18 @@ import JoblyApi from './JoblyApi';
 class Profile extends Component {
   constructor(props) {
     super(props);
-    this.state = { password: '', error: [], ...this.props.currentUser };
+    this.state = { password: '', error: [] };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const oldCurrentUser = prevState;
+    const newCurrentUser = this.props.currentUser;
+
+    if (oldCurrentUser.username !== newCurrentUser.username) {
+      this.setState({ ...this.props.currentUser });
+    }
   }
 
   handleChange(evt) {
@@ -30,12 +39,11 @@ class Profile extends Component {
         'POST'
       );
 
-      console.log('user deets', userDetails);
+      // update user details, will throw if there are any major issues
       await JoblyApi.request(`users/${username}`, userDetails, 'PATCH');
 
       this.props.submit(loginResponse.token);
     } catch (err) {
-      console.log('Checking error', err);
       this.setState({ error: err });
     }
   }
@@ -50,7 +58,7 @@ class Profile extends Component {
         <p>{currentUser.username}</p>
         <form onSubmit={this.handleSubmit}>
           <div>
-            <label htmlfor="first_name">First Name</label>
+            <label htmlFor="first_name">First Name</label>
             <input
               name="first_name"
               type="text"
@@ -59,7 +67,7 @@ class Profile extends Component {
             />
           </div>
           <div>
-            <label htmlfor="last_name">Last Name</label>
+            <label htmlFor="last_name">Last Name</label>
             <input
               name="last_name"
               type="text"
@@ -68,7 +76,7 @@ class Profile extends Component {
             />
           </div>
           <div>
-            <label htmlfor="email">Email</label>
+            <label htmlFor="email">Email</label>
             <input
               name="email"
               type="email"
@@ -77,7 +85,7 @@ class Profile extends Component {
             />
           </div>
           <div>
-            <label htmlfor="photo_url">Photo URL</label>
+            <label htmlFor="photo_url">Photo URL</label>
             <input
               name="photo_url"
               type="url"
@@ -86,7 +94,7 @@ class Profile extends Component {
             />
           </div>
           <div>
-            <label htmlfor="password">Re-enter Password</label>
+            <label htmlFor="password">Re-enter Password</label>
             <input
               name="password"
               type="password"

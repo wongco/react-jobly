@@ -15,6 +15,7 @@ import JoblyApi from './JoblyApi';
 class ProtectedRoute extends Component {
   render() {
     if (this.props.token) {
+      console.log(this.props);
       return <Route {...this.props} />;
     }
     return <Redirect to="/" />;
@@ -40,7 +41,6 @@ class Routes extends Component {
     this.getUserDetails = this.getUserDetails.bind(this);
     this.redirectJobsAfter = this.redirectJobsAfter.bind(this);
     this.editProfileSubmit = this.editProfileSubmit.bind(this);
-    console.log('This???', this);
   }
 
   async componentDidMount() {
@@ -63,7 +63,6 @@ class Routes extends Component {
 
   async authFormSubmit(token) {
     const userDetails = await this.getUserDetails(token);
-    console.log('In authformsubmit', userDetails);
     this.setState({ token, ...userDetails });
     this.props.history.replace('/jobs');
   }
@@ -140,7 +139,7 @@ class Routes extends Component {
 
   renderProfilePage() {
     const { jobs, ...details } = this.state.currentUser;
-    console.log('In Render method', jobs, details);
+    // console.log('In Render method', jobs, details);
     return (
       <Profile
         currentUser={details}
@@ -179,4 +178,4 @@ Routes.propTypes = {};
 
 Routes.defaultProps = {};
 
-export default withRouter(Routes);
+export default Routes;
