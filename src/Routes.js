@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter, Switch, Route, Redirect } from 'react-router-dom';
+import styled from 'styled-components';
 import Navbar from './NavBar';
 import ResourceList from './ResourceList';
 import CompanyDetail from './CompanyDetail';
@@ -7,6 +8,26 @@ import AuthForm from './AuthForm';
 import HomePage from './HomePage';
 import Profile from './Profile';
 import JoblyApi from './JoblyApi';
+import bgimg from './sfdowntown.jpg';
+
+const StyledContainer = styled.div`
+  height: calc(100vh - 50px);
+  color: black;
+
+  &::after {
+    content: '';
+    background: url(${bgimg});
+    background-size: cover;
+    opacity: 0.3;
+    top: 50px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;
+  }
+`;
+
 // import styled from 'styled-components';
 
 // import Company from './Company';
@@ -55,7 +76,7 @@ class Routes extends Component {
     this.setState({ token, ...userDetails });
   }
 
-  // depreciate - do to wrapper + editProfileSubmit
+  // deprecate - due to wrapper + editProfileSubmit
   // async authFormSubmit(token) {
   //   const userDetails = await this.getUserDetails(token);
   //   this.setState({ token, ...userDetails });
@@ -87,7 +108,7 @@ class Routes extends Component {
   render() {
     const { token } = this.state;
     return (
-      <div>
+      <StyledContainer>
         <Navbar logout={this.logout} token={token} />
         <Switch>
           <Route
@@ -138,7 +159,7 @@ class Routes extends Component {
             render={() => <ResourceList resourceType="jobs" />}
           />
         </Switch>
-      </div>
+      </StyledContainer>
     );
   }
 }

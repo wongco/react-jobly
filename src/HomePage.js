@@ -1,20 +1,64 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: auto;
+  height: calc(100vh - 50px);
+  color: black;
+`;
+
+const StyledTitle = styled.h1`
+  font-size: 300%;
+`;
+
+const StyledMessage = styled.p`
+  font-size: 150%;
+  font-weight: 600;
+  margin: 10px 0;
+`;
+
+const StyledWelcome = styled.div`
+  font-size: 250%;
+  font-weight: 600;
+  margin: 10px 0;
+`;
+
+const StyledButton = styled.button`
+  font-size: 120%;
+  font-weight: bold;
+  border: none;
+  background-color: #4682b4;
+  color: white;
+  border-radius: 5px;
+  padding: 10px 15px;
+  margin: 20px;
+  transition: background-color 0.75s;
+
+  &:hover {
+    background-color: rgb(220, 53, 69);
+    cursor: pointer;
+  }
+`;
 
 class HomePage extends Component {
   render() {
     return (
-      <div>
-        <h1>Jobly</h1>
-        <p>All the jobs in one, convenient place</p>
+      <StyledContainer>
+        <StyledTitle>Jobly</StyledTitle>
+        <StyledMessage>All the jobs in one, convenient place.</StyledMessage>
         {this.props.token ? (
-          <h2>Welcome Back!</h2>
+          <StyledWelcome>Welcome Back!</StyledWelcome>
         ) : (
           <Link to="/login">
-            <button>Log in</button>
+            <StyledButton>Log in</StyledButton>
           </Link>
         )}
-      </div>
+      </StyledContainer>
     );
   }
 }

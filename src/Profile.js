@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-//import './Profile.css';
-// import styled from 'styled-components';
+import styled from 'styled-components';
 import JoblyApi from './JoblyApi';
 
 class Profile extends Component {
@@ -80,58 +79,60 @@ class Profile extends Component {
     return (
       <div>
         <h1>Profile</h1>
-        <label>Username</label>
-        <p>{this.state.username}</p>
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            <label htmlFor="first_name">First Name</label>
-            <input
-              name="first_name"
-              type="text"
-              value={first_name}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div>
-            <label htmlFor="last_name">Last Name</label>
-            <input
-              name="last_name"
-              type="text"
-              value={last_name}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div>
-            <label htmlFor="email">Email</label>
-            <input
-              name="email"
-              type="email"
-              value={email}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div>
-            <label htmlFor="photo_url">Photo URL</label>
-            <input
-              name="photo_url"
-              type="text"
-              value={photo_url}
-              onChange={this.handleChange}
-            />
-          </div>
-          <div>
-            <label htmlFor="password">Re-enter Password</label>
-            <input
-              name="password"
-              type="password"
-              value={password}
-              onChange={this.handleChange}
-            />
-          </div>
-          <button>Submit</button>
-        </form>
-        {this.state.success && <div>User updated successfully.</div>}
-        {!!this.state.error.length && <div>{this.state.error}</div>}
+        <div>
+          <label>Username</label>
+          <p>{this.state.username}</p>
+          <form onSubmit={this.handleSubmit}>
+            <div>
+              <label htmlFor="first_name">First Name</label>
+              <input
+                name="first_name"
+                type="text"
+                value={first_name}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="last_name">Last Name</label>
+              <input
+                name="last_name"
+                type="text"
+                value={last_name}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="email">Email</label>
+              <input
+                name="email"
+                type="email"
+                value={email}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="photo_url">Photo URL</label>
+              <input
+                name="photo_url"
+                type="text"
+                value={photo_url}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="password">Re-enter Password</label>
+              <input
+                name="password"
+                type="password"
+                value={password}
+                onChange={this.handleChange}
+              />
+            </div>
+            <button>Submit</button>
+          </form>
+          {this.state.success && <div>User updated successfully.</div>}
+          {!!this.state.error.length && <div>{this.state.error}</div>}
+        </div>
       </div>
     );
   }
