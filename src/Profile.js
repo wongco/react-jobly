@@ -91,6 +91,10 @@ const StyledButton = styled.button`
     background-color: #008080;
     cursor: pointer;
   }
+
+  &:disabled {
+  background: lightgray;
+}
 `;
 
 const StyledAert = styled.div`
@@ -249,7 +253,9 @@ class Profile extends Component {
                 />
               </StyledInputContainer>
               <StyledAert style={alertStyle}>{alertMessage}</StyledAert>
-              <StyledButton>Submit</StyledButton>
+              <StyledButton disabled={this.state.password.length === 0}>
+                Submit
+              </StyledButton>
             </StyledForm>
           </StyledCard>
         </ProfileContainer>
