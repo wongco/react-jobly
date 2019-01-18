@@ -2,6 +2,107 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import JoblyApi from './JoblyApi';
 
+const FlexContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+`;
+
+const ProfileContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 35vw;
+  min-width: 400px;
+  margin-top: 15px;
+  border-radius: 5px;
+`;
+
+const ProfileTitle = styled.p`
+  font-size: 200%;
+  font-weight: 500;
+  margin-bottom: 10px;
+`;
+
+const StyledCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  width: 100%;
+  padding: 20px;
+`;
+
+const StyledInputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding: 0;
+  height: 80px;
+  width: 100%;
+`;
+
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
+const StyledLabel = styled.label`
+  font-size: 120%;
+  font-weight: 700;
+  margin: 0;
+  padding: 0 0 0 5px;
+`;
+
+const StyledInput = styled.input`
+  box-sizing: border-box;
+  padding-left: 15px;
+  font-size: 125%;
+  width: 100%;
+  height: 40px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  outline: none;
+  color: DarkSlateGrey;
+`;
+
+const StyledUsername = styled.p`
+  font-size: 120%;
+  margin: 0;
+  padding: 0 0 0 5px;
+`;
+
+const StyledButton = styled.button`
+  font-size: 125%
+  width: 100px;
+  background-color: #20B2AA;
+  border-radius: 5px;
+  padding: 10px 0;
+  margin: 15px 0 0 0;
+  color: white;
+  width: 100%;
+  outline: none;
+
+  &:hover {
+    background-color: #008080;
+    cursor: pointer;
+  }
+`;
+
+const StyledAert = styled.div`
+  width: 100%;
+  font-size: 120%;
+  margin: 10px 0;
+  color: white;
+  background-color: skyblue;
+  border-radius: 5px;
+  padding: 10px 0;
+`;
+
 class Profile extends Component {
   constructor(props) {
     super(props);
@@ -36,6 +137,7 @@ class Profile extends Component {
   }
 
   async handleSubmit(evt) {
+    console.log('hi');
     evt.preventDefault();
     let {
       username,
@@ -64,7 +166,7 @@ class Profile extends Component {
       this.props.submit(loginResponse.token);
 
       // setState to success, clear password field, render success message, remove after 3 seconds
-      this.setState({ success: true, password: '' }, () => {
+      this.setState({ success: true, password: '', error: [] }, () => {
         setTimeout(() => {
           this.setState({ success: false });
         }, 3000);
@@ -76,64 +178,82 @@ class Profile extends Component {
 
   render() {
     const { first_name, last_name, email, photo_url, password } = this.state;
+
+    // alert logic for errors and success message
+    let alertStyle = {
+      display: 'none'
+    };
+    let alertMessage = null;
+    if (this.state.success) {
+      alertMessage = 'User updated successfully.';
+      alertStyle.display = 'block';
+    } else if (this.state.error.length > 0) {
+      alertMessage = this.state.error;
+      alertStyle.display = 'block';
+    }
+    // {this.state.success && <div>User updated successfully.</div>}
+    //           {!!this.state.error.length && <div>{this.state.error}</div>}
     return (
-      <div>
-        <h1>Profile</h1>
-        <div>
-          <label>Username</label>
-          <p>{this.state.username}</p>
-          <form onSubmit={this.handleSubmit}>
-            <div>
-              <label htmlFor="first_name">First Name</label>
-              <input
-                name="first_name"
-                type="text"
-                value={first_name}
-                onChange={this.handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="last_name">Last Name</label>
-              <input
-                name="last_name"
-                type="text"
-                value={last_name}
-                onChange={this.handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="email">Email</label>
-              <input
-                name="email"
-                type="email"
-                value={email}
-                onChange={this.handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="photo_url">Photo URL</label>
-              <input
-                name="photo_url"
-                type="text"
-                value={photo_url}
-                onChange={this.handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="password">Re-enter Password</label>
-              <input
-                name="password"
-                type="password"
-                value={password}
-                onChange={this.handleChange}
-              />
-            </div>
-            <button>Submit</button>
-          </form>
-          {this.state.success && <div>User updated successfully.</div>}
-          {!!this.state.error.length && <div>{this.state.error}</div>}
-        </div>
-      </div>
+      <FlexContainer>
+        <ProfileContainer>
+          <ProfileTitle>Profile</ProfileTitle>
+          <StyledCard>
+            <StyledInputContainer>
+              <StyledLabel>Username</StyledLabel>
+              <StyledUsername>{this.state.username}</StyledUsername>
+            </StyledInputContainer>
+            <StyledForm onSubmit={this.handleSubmit}>
+              <StyledInputContainer>
+                <StyledLabel htmlFor="first_name">First Name</StyledLabel>
+                <StyledInput
+                  name="first_name"
+                  type="text"
+                  value={first_name}
+                  onChange={this.handleChange}
+                />
+              </StyledInputContainer>
+              <StyledInputContainer>
+                <StyledLabel htmlFor="last_name">Last Name</StyledLabel>
+                <StyledInput
+                  name="last_name"
+                  type="text"
+                  value={last_name}
+                  onChange={this.handleChange}
+                />
+              </StyledInputContainer>
+              <StyledInputContainer>
+                <StyledLabel htmlFor="email">Email</StyledLabel>
+                <StyledInput
+                  name="email"
+                  type="email"
+                  value={email}
+                  onChange={this.handleChange}
+                />
+              </StyledInputContainer>
+              <StyledInputContainer>
+                <StyledLabel htmlFor="photo_url">Photo URL</StyledLabel>
+                <StyledInput
+                  name="photo_url"
+                  type="text"
+                  value={photo_url}
+                  onChange={this.handleChange}
+                />
+              </StyledInputContainer>
+              <StyledInputContainer>
+                <StyledLabel htmlFor="password">Re-enter Password</StyledLabel>
+                <StyledInput
+                  name="password"
+                  type="password"
+                  value={password}
+                  onChange={this.handleChange}
+                />
+              </StyledInputContainer>
+              <StyledAert style={alertStyle}>{alertMessage}</StyledAert>
+              <StyledButton>Submit</StyledButton>
+            </StyledForm>
+          </StyledCard>
+        </ProfileContainer>
+      </FlexContainer>
     );
   }
 }
