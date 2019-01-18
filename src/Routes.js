@@ -18,6 +18,8 @@ const StyledContainer = styled.div`
     content: '';
     background: url(${bgimg});
     background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
     opacity: 0.3;
     top: 50px;
     left: 0;

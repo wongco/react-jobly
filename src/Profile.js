@@ -84,7 +84,6 @@ const StyledButton = styled.button`
   padding: 10px 0;
   margin: 15px 0 0 0;
   color: white;
-  width: 100%;
   outline: none;
 
   &:hover {
