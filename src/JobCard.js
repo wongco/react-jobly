@@ -75,6 +75,7 @@ class JobCard extends Component {
   render() {
     const { id, title, salary, equity, company_handle } = this.props.info;
 
+    // alternate button based on application status
     let buttonElement;
     if (this.props.isApplied) {
       buttonElement = (

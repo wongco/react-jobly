@@ -48,7 +48,7 @@ class Routes extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      token: JSON.parse(localStorage.getItem('token')),
+      token: localStorage.getItem('token'),
       currentUser: {
         jobs: new Set()
       }
