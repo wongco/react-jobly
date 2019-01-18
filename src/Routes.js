@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { withRouter, Switch, Route, Redirect } from 'react-router-dom';
 import Navbar from './NavBar';
 import ResourceList from './ResourceList';
 import CompanyDetail from './CompanyDetail';
 import AuthForm from './AuthForm';
 import HomePage from './HomePage';
-// import JoblyApi from './JoblyApi';
+import Profile from './Profile';
+import JoblyApi from './JoblyApi';
 // import styled from 'styled-components';
 
 // import Company from './Company';
@@ -24,7 +25,8 @@ class Routes extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      token: ''
+      token: JSON.parse(localStorage.getItem('token')),
+      currentUser: {}
     };
     this.getCompanyHandle = this.getCompanyHandle.bind(this);
     this.authFormSubmit = this.authFormSubmit.bind(this);
@@ -35,49 +37,55 @@ class Routes extends Component {
     this.renderCompaniesPage = this.renderCompaniesPage.bind(this);
     this.rendCompDetail = this.rendCompDetail.bind(this);
     this.renderJobDetail = this.renderJobDetail.bind(this);
+    this.getUserDetails = this.getUserDetails.bind(this);
+    this.redirectJobsAfter = this.redirectJobsAfter.bind(this);
+    this.editProfileSubmit = this.editProfileSubmit.bind(this);
+    console.log('This???', this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const token = JSON.parse(localStorage.getItem('token'));
-
-    this.setState({ token });
+    if (token) {
+      const userDetails = await this.getUserDetails(this.state.token);
+      this.setState({ token, ...userDetails });
+    }
   }
 
   logout() {
     localStorage.clear();
-    this.setState({ token: '' });
+    this.setState({ token: '', currentUser: {} });
   }
 
-  authFormSubmit(authDetails) {
-    this.setState(authDetails);
+  async editProfileSubmit(token) {
+    const userDetails = await this.getUserDetails(token);
+    this.setState({ token, ...userDetails });
+  }
+
+  async authFormSubmit(token) {
+    const userDetails = await this.getUserDetails(token);
+    console.log('In authformsubmit', userDetails);
+    this.setState({ token, ...userDetails });
+    this.props.history.replace('/jobs');
+  }
+
+  redirectJobsAfter(func) {
+    async function wrapper(...args) {
+      const value = await func(...args);
+      this.props.history.replace('/jobs');
+      return value;
+    }
+    return wrapper.bind(this);
   }
 
   getCompanyHandle({ match }) {
     return match.params.handle;
   }
 
-  renderHomePage() {
-    return <HomePage token={this.state.token} />;
-  }
-
-  renderLoginPage() {
-    return <AuthForm submit={this.authFormSubmit} />;
-  }
-
-  renderProfilePage() {
-    return <p>Route Profieeeeeeeee</p>;
-  }
-
-  renderCompaniesPage(props) {
-    return <ResourceList resourceType="companies" />;
-  }
-
-  rendCompDetail(props) {
-    return <CompanyDetail handle={this.getCompanyHandle(props)} />;
-  }
-
-  renderJobDetail(props) {
-    return <ResourceList resourceType="jobs" />;
+  async getUserDetails(token) {
+    const tokenParts = token.split('.');
+    const { username } = JSON.parse(atob(tokenParts[1]));
+    const { user } = await JoblyApi.request(`users/${username}`);
+    return { currentUser: user };
   }
 
   render() {
@@ -86,18 +94,8 @@ class Routes extends Component {
       <div>
         <Navbar logout={this.logout} token={token} />
         <Switch>
-          <ProtectedRoute
-            token={token}
-            exact
-            path="/"
-            render={this.renderHomePage}
-          />
-          <ProtectedRoute
-            token={token}
-            exact
-            path="/login"
-            render={this.renderLoginPage}
-          />
+          <Route exact path="/" render={this.renderHomePage} />
+          <Route exact path="/login" render={this.renderLoginPage} />
           <ProtectedRoute
             token={token}
             exact
@@ -127,7 +125,41 @@ class Routes extends Component {
     );
   }
 
-  state = {};
+  renderHomePage() {
+    return <HomePage token={this.state.token} />;
+  }
+
+  renderLoginPage(routerProps) {
+    return (
+      <AuthForm
+        {...routerProps}
+        submit={this.redirectJobsAfter(this.editProfileSubmit)}
+      />
+    );
+  }
+
+  renderProfilePage() {
+    const { jobs, ...details } = this.state.currentUser;
+    console.log('In Render method', jobs, details);
+    return (
+      <Profile
+        currentUser={details}
+        submit={this.redirectJobsAfter(this.editProfileSubmit)}
+      />
+    );
+  }
+
+  renderCompaniesPage(props) {
+    return <ResourceList resourceType="companies" />;
+  }
+
+  rendCompDetail(props) {
+    return <CompanyDetail handle={this.getCompanyHandle(props)} />;
+  }
+
+  renderJobDetail(props) {
+    return <ResourceList resourceType="jobs" />;
+  }
 }
 
 // /
@@ -147,4 +179,4 @@ Routes.propTypes = {};
 
 Routes.defaultProps = {};
 
-export default Routes;
+export default withRouter(Routes);

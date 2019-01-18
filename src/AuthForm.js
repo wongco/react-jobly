@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 // import styled from 'styled-components';
 import JoblyApi from './JoblyApi';
 
@@ -54,8 +53,8 @@ class AuthForm extends Component {
 
       //   Store token. Otherwise the error will be caught
       localStorage.setItem('token', JSON.stringify(apiResponse.token));
-      this.props.submit({ username, token: apiResponse.token });
-      this.props.history.replace('/jobs');
+      this.props.submit(apiResponse.token);
+      console.log('Gonna replace');
     } catch (err) {
       this.setState({ error: err });
     }
@@ -102,7 +101,7 @@ class AuthForm extends Component {
           {this.renderFields()}
           <button>Submit</button>
         </form>
-        {this.state.error.length && <div>{this.state.error}</div>}
+        {!!this.state.error.length && <div>{this.state.error}</div>}
       </div>
     );
   }
