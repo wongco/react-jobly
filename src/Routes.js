@@ -15,7 +15,8 @@ import JoblyApi from './JoblyApi';
 class ProtectedRoute extends Component {
   render() {
     if (this.props.token) {
-      console.log(this.props);
+      // console.log(`passing: stuff to the Route`);
+      // console.log(this.props.render);
       return <Route {...this.props} />;
     }
     return <Redirect to="/" />;
@@ -32,12 +33,6 @@ class Routes extends Component {
     this.getCompanyHandle = this.getCompanyHandle.bind(this);
     this.authFormSubmit = this.authFormSubmit.bind(this);
     this.logout = this.logout.bind(this);
-    this.renderHomePage = this.renderHomePage.bind(this);
-    this.renderLoginPage = this.renderLoginPage.bind(this);
-    this.renderProfilePage = this.renderProfilePage.bind(this);
-    this.renderCompaniesPage = this.renderCompaniesPage.bind(this);
-    this.rendCompDetail = this.rendCompDetail.bind(this);
-    this.renderJobDetail = this.renderJobDetail.bind(this);
     this.getUserDetails = this.getUserDetails.bind(this);
     this.redirectJobsAfter = this.redirectJobsAfter.bind(this);
     this.editProfileSubmit = this.editProfileSubmit.bind(this);
@@ -67,6 +62,7 @@ class Routes extends Component {
     this.props.history.replace('/jobs');
   }
 
+  /** Composition helper that sends user to '/jobs' after running async callback function */
   redirectJobsAfter(func) {
     async function wrapper(...args) {
       const value = await func(...args);
@@ -93,89 +89,62 @@ class Routes extends Component {
       <div>
         <Navbar logout={this.logout} token={token} />
         <Switch>
-          <Route exact path="/" render={this.renderHomePage} />
-          <Route exact path="/login" render={this.renderLoginPage} />
+          <Route
+            exact
+            path="/"
+            render={() => <HomePage token={this.state.token} />}
+          />
+          <Route
+            exact
+            path="/login"
+            render={props => (
+              <AuthForm
+                {...props}
+                submit={this.redirectJobsAfter(this.editProfileSubmit)}
+              />
+            )}
+          />
           <ProtectedRoute
             token={token}
             exact
             path="/profile"
-            render={this.renderProfilePage}
+            render={() => (
+              <Profile
+                token={token}
+                getUserDetails={this.getUserDetails}
+                // currentUser={details}
+                submit={this.editProfileSubmit}
+              />
+            )}
           />
           <ProtectedRoute
             token={token}
             exact
             path="/companies"
-            render={this.renderCompaniesPage}
+            render={() => <ResourceList resourceType="companies" />}
           />
           <ProtectedRoute
             token={token}
             exact
             path="/companies/:handle"
-            render={this.rendCompDetail}
+            render={props => (
+              <CompanyDetail handle={this.getCompanyHandle(props)} />
+            )}
           />
           <ProtectedRoute
             token={token}
             exact
             path="/jobs"
-            render={this.renderJobDetail}
+            render={() => <ResourceList resourceType="jobs" />}
           />
         </Switch>
       </div>
     );
   }
-
-  renderHomePage() {
-    return <HomePage token={this.state.token} />;
-  }
-
-  renderLoginPage(routerProps) {
-    return (
-      <AuthForm
-        {...routerProps}
-        submit={this.redirectJobsAfter(this.editProfileSubmit)}
-      />
-    );
-  }
-
-  renderProfilePage() {
-    const { jobs, ...details } = this.state.currentUser;
-    // console.log('In Render method', jobs, details);
-    return (
-      <Profile
-        currentUser={details}
-        submit={this.redirectJobsAfter(this.editProfileSubmit)}
-      />
-    );
-  }
-
-  renderCompaniesPage(props) {
-    return <ResourceList resourceType="companies" />;
-  }
-
-  rendCompDetail(props) {
-    return <CompanyDetail handle={this.getCompanyHandle(props)} />;
-  }
-
-  renderJobDetail(props) {
-    return <ResourceList resourceType="jobs" />;
-  }
 }
-
-// /
-// Homepage — just a simple welcome message
-// /companies
-// List all companies
-// /companies/apple
-// View details of this ResourceList
-// /jobs
-// List all jobs
-// /login
-// Login/signup form
-// /profile
-// Edit profile page
 
 Routes.propTypes = {};
 
 Routes.defaultProps = {};
 
-export default Routes;
+export default withRouter(Routes);

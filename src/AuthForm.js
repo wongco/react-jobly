@@ -54,7 +54,6 @@ class AuthForm extends Component {
       //   Store token. Otherwise the error will be caught
       localStorage.setItem('token', JSON.stringify(apiResponse.token));
       this.props.submit(apiResponse.token);
-      console.log('Gonna replace');
     } catch (err) {
       this.setState({ error: err });
     }

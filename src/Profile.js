@@ -1,23 +1,33 @@
 import React, { Component } from 'react';
 //import './Profile.css';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import JoblyApi from './JoblyApi';
 
 class Profile extends Component {
   constructor(props) {
     super(props);
-    this.state = { password: '', error: [] };
+    this.state = {
+      password: '',
+      error: [],
+      username: '',
+      first_name: '',
+      last_name: '',
+      email: '',
+      photo_url: '',
+      success: false
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const oldCurrentUser = prevState;
-    const newCurrentUser = this.props.currentUser;
-
-    if (oldCurrentUser.username !== newCurrentUser.username) {
-      this.setState({ ...this.props.currentUser });
+  async componentDidMount() {
+    const { token } = this.props;
+    const currentUserDetails = await this.props.getUserDetails(token);
+    const { jobs, photo_url, ...userDetails } = currentUserDetails.currentUser;
+    if (photo_url === null) {
+      userDetails.photo_url = '';
     }
+    this.setState({ ...userDetails });
   }
 
   handleChange(evt) {
@@ -29,7 +39,14 @@ class Profile extends Component {
 
   async handleSubmit(evt) {
     evt.preventDefault();
-    let { username, error, password, token, ...userDetails } = this.state;
+    let {
+      username,
+      error,
+      password,
+      token,
+      success,
+      ...userDetails
+    } = this.state;
     // AJAX
     try {
       // Check to see if password was correct _i.e._ attempt to login
@@ -39,23 +56,33 @@ class Profile extends Component {
         'POST'
       );
 
+      // if photo_url string is empty, remove from AJAX Request
+      if (userDetails.photo_url.length === 0) {
+        delete userDetails.photo_url;
+      }
+
       // update user details, will throw if there are any major issues
       await JoblyApi.request(`users/${username}`, userDetails, 'PATCH');
-
       this.props.submit(loginResponse.token);
+
+      // setState to success, clear password field, render success message, remove after 5 seconds
+      this.setState({ success: true, password: '' }, () => {
+        setTimeout(() => {
+          this.setState({ success: false });
+        }, 5000);
+      });
     } catch (err) {
       this.setState({ error: err });
     }
   }
 
   render() {
-    const { currentUser } = this.props;
     const { first_name, last_name, email, photo_url, password } = this.state;
     return (
       <div>
         <h1>Profile</h1>
         <label>Username</label>
-        <p>{currentUser.username}</p>
+        <p>{this.state.username}</p>
         <form onSubmit={this.handleSubmit}>
           <div>
             <label htmlFor="first_name">First Name</label>
@@ -88,7 +115,7 @@ class Profile extends Component {
             <label htmlFor="photo_url">Photo URL</label>
             <input
               name="photo_url"
-              type="url"
+              type="text"
               value={photo_url}
               onChange={this.handleChange}
             />
@@ -104,6 +131,7 @@ class Profile extends Component {
           </div>
           <button>Submit</button>
         </form>
+        {this.state.success && <div>User updated successfully.</div>}
         {!!this.state.error.length && <div>{this.state.error}</div>}
       </div>
     );
