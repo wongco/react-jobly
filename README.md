@@ -18,4 +18,4 @@ React-jobly is a React front end for the Jobly (Job Application App). It is buil
 ## Author
 
 - WongCo - [https://github.com/wongco](https://github.com/wongco)
-- DT-1236 - [https://github.com/DT-1236] (https://github.com/DT-1236)
+- DT-1236 - [https://github.com/DT-1236](https://github.com/DT-1236)

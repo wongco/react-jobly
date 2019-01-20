@@ -7,6 +7,7 @@ const FlexContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   width: 100%;
+  height: calc(100vh - 50px);
 `;
 
 const ProfileContainer = styled.div`
