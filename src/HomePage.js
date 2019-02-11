@@ -9,7 +9,7 @@ const StyledContainer = styled.div`
   align-items: center;
   padding-bottom: auto;
   height: calc(100vh - 50px);
-  color: black;
+  color: white;
 `;
 
 const StyledTitle = styled.h1`
