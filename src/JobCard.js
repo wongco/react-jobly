@@ -90,16 +90,14 @@ class JobCard extends Component {
     }
     return (
       <StyledCard>
-        <Link to={`jobs/${id}`}>
-          <JobTextContainer>
-            <StyledName>{title}</StyledName>
-            <StyledJobDetails>Salary: {salary}</StyledJobDetails>
-            {equity ? (
-              <StyledJobDetails>Equity {equity}</StyledJobDetails>
-            ) : null}
-            <StyledJobDetails>Company: {company_handle}</StyledJobDetails>
-          </JobTextContainer>
-        </Link>
+        {/* <Link to={`jobs/${id}`}> */}
+        <JobTextContainer>
+          <StyledName>{title}</StyledName>
+          <StyledJobDetails>Salary: {salary}</StyledJobDetails>
+          {equity ? <StyledJobDetails>Equity {equity}</StyledJobDetails> : null}
+          <StyledJobDetails>Company: {company_handle}</StyledJobDetails>
+        </JobTextContainer>
+        {/* </Link> */}
         <StyledButtonContainer>{buttonElement}</StyledButtonContainer>
       </StyledCard>
     );
