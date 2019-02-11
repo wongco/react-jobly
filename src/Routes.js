@@ -13,7 +13,7 @@ import bgimg from './sfdowntown.jpg';
 
 const StyledContainer = styled.div`
   height: 100%
-  /* height: calc(100vh - 50px); */
+  min-height: 100vh;
   color: black;
   background: url(${bgimg});
   background-size: cover;
