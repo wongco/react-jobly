@@ -1,11 +1,12 @@
-# react-jobly Front-end
+# react-jobly
 
 React-jobly is a React front end for the Jobly (Job Application App). It is built with JavaScript, React, React Router, Styled Components and static assets.
 
 ## Prerequisites
 
-- Fork Repo
+- Fork Repo, npm install and customize
 - Build with Heroku, AWS, or cloud provider of your choice.
+- Requires [Jobly Restful API Backend](https://github.com/wongco/express-jobly)
 
 ## Built With
 
