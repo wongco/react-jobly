@@ -18,19 +18,8 @@ const StyledContainer = styled.div`
   background: url(${bgimg});
   background-size: cover;
   background-attachment: fixed;
-  background-attachment: center;
-
-  &::after {
-    content: '';
-
-    opacity: 0.3;
-    top: 50px;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    position: absolute;
-    z-index: -1;
-  }
+  background-color: rgba(255, 255, 255, 0.5);
+  background-blend-mode: lighten;
 `;
 
 // JSX including ProtectedRoute must be given spread props

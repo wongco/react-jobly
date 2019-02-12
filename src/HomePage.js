@@ -9,7 +9,7 @@ const StyledContainer = styled.div`
   align-items: center;
   padding-bottom: auto;
   height: calc(100vh - 50px);
-  color: white;
+  color: black;
 `;
 
 const StyledTitle = styled.h1`
@@ -20,6 +20,7 @@ const StyledMessage = styled.p`
   font-size: 150%;
   font-weight: 600;
   margin: 10px 0;
+  text-align: center;
 `;
 
 const StyledWelcome = styled.div`
