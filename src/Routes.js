@@ -9,7 +9,7 @@ import Profile from './Profile';
 import JoblyApi from './JoblyApi';
 
 import styled from 'styled-components';
-import bgimg from './sfdowntown.jpg';
+import bgimg from './sfdowntown3a.jpg';
 
 const StyledContainer = styled.div`
   height: 100%
